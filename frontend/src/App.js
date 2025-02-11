@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CreditCard, Calendar, Clock, Tag, Users, Trash2, ChevronUp, ChevronDown, Plus, DollarSign } from 'lucide-react';
+import { Calendar, Clock, Users, Trash2, ChevronUp, ChevronDown, Plus, DollarSign } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -42,41 +42,41 @@ function App() {
   ];
 
   useEffect(() => {
-    localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
-    calculateExpenses();
-  }, [subscriptions]);
+  localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+  calculateExpenses();
+}, [subscriptions, calculateExpenses]);
 
-  const calculateExpenses = () => {
-    let monthly = 0;
-    let annual = 0;
+  const calculateExpenses = useCallback(() => {
+  let monthly = 0;
+  let annual = 0;
 
-    subscriptions.forEach(sub => {
-      const price = parseFloat(sub.price);
-      switch (sub.duration) {
-        case 'monthly':
-          monthly += price;
-          annual += price * 12;
-          break;
-        case 'quarterly':
-          monthly += price / 3;
-          annual += price * 4;
-          break;
-        case 'semi-annual':
-          monthly += price / 6;
-          annual += price * 2;
-          break;
-        case 'annual':
-          monthly += price / 12;
-          annual += price;
-          break;
-        default:
-          break;
-      }
-    });
+  subscriptions.forEach(sub => {
+    const price = parseFloat(sub.price);
+    switch (sub.duration) {
+      case 'monthly':
+        monthly += price;
+        annual += price * 12;
+        break;
+      case 'quarterly':
+        monthly += price / 3;
+        annual += price * 4;
+        break;
+      case 'semi-annual':
+        monthly += price / 6;
+        annual += price * 2;
+        break;
+      case 'annual':
+        monthly += price / 12;
+        annual += price;
+        break;
+      default:
+        break;
+    }
+  });
 
-    setMonthlyExpense(monthly.toFixed(2));
-    setAnnualExpense(annual.toFixed(2));
-  };
+  setMonthlyExpense(monthly.toFixed(2));
+  setAnnualExpense(annual.toFixed(2));
+}, [subscriptions]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
