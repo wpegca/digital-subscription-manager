@@ -25,27 +25,7 @@ function App() {
   const [sortOrder, setSortOrder] = useState('asc');
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const categories = [
-    'streaming',
-    'cloud',
-    'development',
-    'productivity',
-    'communication',
-    'other'
-  ];
-
-  const durations = [
-    { value: 'monthly', label: 'Monthly', icon: Clock },
-    { value: 'quarterly', label: 'Quarterly', icon: Clock },
-    { value: 'semi-annual', label: 'Semi-Annual', icon: Calendar },
-    { value: 'annual', label: 'Annual', icon: Calendar }
-  ];
-
-  useEffect(() => {
-  localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
-  calculateExpenses();
-}, [subscriptions, calculateExpenses]);
-
+  
   const calculateExpenses = useCallback(() => {
   let monthly = 0;
   let annual = 0;
@@ -78,6 +58,27 @@ function App() {
   setAnnualExpense(annual.toFixed(2));
 }, [subscriptions]);
 
+ useEffect(() => {
+    localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+    calculateExpenses();
+  }, [subscriptions, calculateExpenses]);
+
+  const categories = [
+    'streaming',
+    'cloud',
+    'development',
+    'productivity',
+    'communication',
+    'other'
+  ];
+
+  const durations = [
+    { value: 'monthly', label: 'Monthly', icon: Clock },
+    { value: 'quarterly', label: 'Quarterly', icon: Clock },
+    { value: 'semi-annual', label: 'Semi-Annual', icon: Calendar },
+    { value: 'annual', label: 'Annual', icon: Calendar }
+  ];
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const newSubscription = {
